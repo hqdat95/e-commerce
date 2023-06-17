@@ -1,4 +1,6 @@
 import Joi from 'joi';
+import _ from 'lodash';
+import isRoles from '../constants/users.roles';
 
 const baseSchema = {
   fullName: Joi.string().min(6).required().label('Full Name'),
@@ -8,9 +10,9 @@ const baseSchema = {
     .label('Email'),
   password: Joi.string()
     .required()
-    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
+    .pattern(/^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
     .label('Password'),
-  role: Joi.string().valid('admin', 'customer').default('customer').label('Role'),
+  role: Joi.number().default(isRoles.CUSTOMER).optional().label('Role'),
 };
 
 export const userSchema = (fields = Object.keys(baseSchema)) => {
@@ -21,5 +23,5 @@ export const userSchema = (fields = Object.keys(baseSchema)) => {
     return obj;
   }, {});
 
-  return Joi.object(selectedFields);
+  return Joi.object(selectedFields).unknown();
 };

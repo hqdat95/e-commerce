@@ -9,7 +9,11 @@ import { paymentSchema } from './payments.validator';
 import { cartItemSchema } from './cartItems.validator';
 import { productWishlistSchema } from './productWishlists.validator';
 
+import { loginSchema, passwordSchema } from './auth.validator';
+
 export default {
+  loginSchema,
+  passwordSchema,
   userSchema,
   transportInfoSchema,
   categorySchema,
