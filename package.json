@@ -15,10 +15,12 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "connect-redis": "^7.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.1.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "googleapis": "^120.0.0",
     "ioredis": "^5.3.2",
     "joi": "^17.9.2",
