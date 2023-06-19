@@ -10,6 +10,7 @@ import homeRouter from './routes/home/home.routes';
 import session from './middlewares/session.middleware';
 import errorHandler from './middlewares/error.middleware';
 import formatRes from './middlewares/response.middleware';
+import session from './middlewares/session.middleware';
 
 dotenv.config();
 
