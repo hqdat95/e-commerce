@@ -1,38 +1,32 @@
-const formatRes = (req, res, next) => {
-  res.success = (data, keys) => {
-    let resData;
+const pick = (object, paths) => {
+  const filteredItem = {};
 
-    switch (true) {
-      case Array.isArray(data) && Array.isArray(keys):
-        resData = data.map((item) => {
-          const filteredItem = {};
-          for (const key of keys) {
-            if (item[key] !== undefined) {
-              filteredItem[key] = item[key];
-            }
-          }
-          return filteredItem;
-        });
-        break;
-
-      case Array.isArray(keys):
-        resData = keys.reduce((accData, key) => {
-          if (data[key] !== undefined) {
-            accData[key] = data[key];
-          }
-          return accData;
-        }, {});
-        break;
-
-      default:
-        resData = data;
-        break;
+  for (const path of paths) {
+    if (!!object[path]) {
+      filteredItem[path] = object[path];
     }
+  }
 
-    return res.status(200).json({ success: true, data: resData });
+  return filteredItem;
+};
+
+const mapRes = (data, keys) => {
+  if (!data) return data;
+
+  if (Array.isArray(data)) {
+    return data.map((item) => pick(item, keys));
+  }
+
+  return pick(data, keys);
+}
+
+export default (req, res, next) => {
+  res.success = (data, keys) => {
+    return res.status(200).json({
+      success: true,
+      data: mapRes(data, keys)
+    });
   };
 
   next();
 };
-
-export default formatRes;
