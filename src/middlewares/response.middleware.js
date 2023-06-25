@@ -1,38 +1,22 @@
-const formatRes = (req, res, next) => {
+import _ from 'lodash';
+
+export default (req, res, next) => {
   res.success = (data, keys) => {
-    let resData;
+    if (!data) return res.sendStatus(204);
 
-    switch (true) {
-      case Array.isArray(data) && Array.isArray(keys):
-        resData = data.map((item) => {
-          const filteredItem = {};
-          for (const key of keys) {
-            if (item[key] !== undefined) {
-              filteredItem[key] = item[key];
-            }
-          }
-          return filteredItem;
-        });
-        break;
+    const mapRes = _.cond([
+      [_.isNumber, () => data],
+      [_.isString, () => data],
+      [_.isArray, (data) => _.map(data, (item) => _.pick(item, keys))],
+      [_.isObject, (data) => _.pick(data, keys)],
+      [_.stubTrue, () => data],
+    ]);
 
-      case Array.isArray(keys):
-        resData = keys.reduce((accData, key) => {
-          if (data[key] !== undefined) {
-            accData[key] = data[key];
-          }
-          return accData;
-        }, {});
-        break;
-
-      default:
-        resData = data;
-        break;
-    }
-
-    return res.status(200).json({ success: true, data: resData });
+    return res.status(200).json({
+      success: true,
+      data: mapRes(data),
+    });
   };
 
   next();
 };
-
-export default formatRes;
