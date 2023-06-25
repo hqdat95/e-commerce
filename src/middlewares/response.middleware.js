@@ -1,30 +1,20 @@
-const pick = (object, paths) => {
-  const filteredItem = {};
-
-  for (const path of paths) {
-    if (!!object[path]) {
-      filteredItem[path] = object[path];
-    }
-  }
-
-  return filteredItem;
-};
-
-const mapRes = (data, keys) => {
-  if (!data) return data;
-
-  if (Array.isArray(data)) {
-    return data.map((item) => pick(item, keys));
-  }
-
-  return pick(data, keys);
-}
+import _ from 'lodash';
 
 export default (req, res, next) => {
   res.success = (data, keys) => {
+    if (!data) return res.sendStatus(204);
+
+    const mapRes = _.cond([
+      [_.isNumber, () => data],
+      [_.isString, () => data],
+      [_.isArray, (data) => _.map(data, (item) => _.pick(item, keys))],
+      [_.isObject, (data) => _.pick(data, keys)],
+      [_.stubTrue, () => data],
+    ]);
+
     return res.status(200).json({
       success: true,
-      data: mapRes(data, keys)
+      data: mapRes(data),
     });
   };
 
