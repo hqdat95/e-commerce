@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysql-server:
+    image: mysql:8.0.33
+    restart: always
+    environment:
+      - MYSQL_DATABASE=e-commerce
+      - MYSQL_ROOT_PASSWORD=admin
+    ports:
+      - '3306:3306'
+    command: ['--default-authentication-plugin=mysql_native_password']
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - ecommerce_network
+
+  redis-server:
+    image: redis:7.0.11
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./data/redis/redis.conf:/data/redis.conf
+    command: redis-server /data/redis.conf --requirepass redis --appendonly yes --save "" --protected-mode no --dir /data
+    networks:
+      - ecommerce_network
+
+networks:
+  ecommerce_network:
+    driver: bridge
