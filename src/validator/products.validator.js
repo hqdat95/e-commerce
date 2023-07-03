@@ -1,12 +1,11 @@
 import Joi from 'joi';
 
 const baseSchema = {
-  id: Joi.string().guid({ version: 'uuidv4' }).required().label('ID'),
   name: Joi.string().required().label('Name'),
-  description: Joi.string().required().label('Description'),
-  price: Joi.number().precision(2).min(0).required().label('Price'),
+  description: Joi.string().allow('').optional().label('Description'),
+  price: Joi.number().precision(2).greater(0).required().label('Price'),
   quantity: Joi.number().integer().min(0).required().label('Quantity'),
-  categoryId: Joi.string().guid({ version: 'uuidv4' }).required().label('Category ID'),
+  categoryId: Joi.string().guid({ version: 'uuidv4' }).optional().label('Category ID'),
 };
 
 export const productSchema = (fields = Object.keys(baseSchema)) => {
@@ -17,5 +16,5 @@ export const productSchema = (fields = Object.keys(baseSchema)) => {
     return obj;
   }, {});
 
-  return Joi.object(selectedFields);
+  return Joi.object(selectedFields).unknown();
 };

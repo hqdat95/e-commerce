@@ -1,28 +1,20 @@
 import { Router } from 'express';
+import asyncHandler from '../../middlewares/async.middleware';
 import * as productController from '../../controllers/products.controller';
+import { productCreate, productUpdate } from '../../middlewares/validator.middleware';
 
 const router = Router();
 
-router.get('/search', productController.search);
+router.get('/', asyncHandler(productController.find));
 
-router.get('/category/:categoryId', productController.findByCategory);
+router.get('/removed', asyncHandler(productController.findWithRemoved));
 
-router.get('/', productController.findAll);
+router.post('/', productCreate, asyncHandler(productController.create));
 
-router.get('/active', productController.findAllActive);
+router.put('/', productUpdate, asyncHandler(productController.update));
 
-router.get('/removed', productController.findAllRemoved);
+router.delete('/', asyncHandler(productController.remove));
 
-router.get('/:id', productController.findById);
-
-router.get('/removed/:id', productController.findRemoved);
-
-router.post('/', productController.create);
-
-router.put('/:id', productController.update);
-
-router.delete('/:id', productController.remove);
-
-router.put('/restore/:id', productController.restore);
+router.post('/restore', asyncHandler(productController.restore));
 
 export default router;

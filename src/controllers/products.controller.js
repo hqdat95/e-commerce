@@ -1,128 +1,40 @@
-import * as productService from '../services/products.service';
+import * as productService from '../services/product.service';
+import fields from '../utils/response.util';
 
-export const search = async (req, res, next) => {
-  try {
-    const keywords = req.query.q;
+export const find = async (req, res) => {
+  const result = await productService.find(req.query);
 
-    const result = await productService.search(keywords);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
+  res.success(result, fields.productFind);
 };
 
-export const findByCategory = async (req, res, next) => {
-  try {
-    const { categoryId } = req.params;
+export const findWithRemoved = async (req, res) => {
+  const result = await productService.findWithRemoved(req.query);
 
-    const result = await productService.findByCategory(categoryId);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
+  res.success(result, fields.productFind);
 };
 
-export const findAll = async (req, res, next) => {
-  try {
-    const result = await productService.findAll();
+export const create = async (req, res) => {
+  const result = await productService.create(req.body);
 
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
+  res.success(result, fields.productCreate);
 };
 
-export const findAllActive = async (req, res, next) => {
-  try {
-    const result = await productService.findAllActive();
+export const update = async (req, res) => {
+  const { id } = req.query;
 
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
+  const result = await productService.update(id, req.body);
+
+  res.success(result, fields.productUpdate);
 };
 
-export const findAllRemoved = async (req, res, next) => {
-  try {
-    const result = await productService.findAllRemoved();
+export const remove = async (req, res) => {
+  await productService.remove(req.query);
 
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
+  res.success();
 };
 
-export const findById = async (req, res, next) => {
-  try {
-    const { id } = req.params;
+export const restore = async (req, res) => {
+  const result = await productService.restore(req.query);
 
-    const result = await productService.findById(id);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const findRemoved = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    const result = await productService.findRemoved(id);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const create = async (req, res, next) => {
-  try {
-    const { name, description, price, quantity, categoryId } = req.body;
-
-    const result = await productService.create(name, description, price, quantity, categoryId);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const update = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { name, description, price, quantity } = req.body;
-
-    const result = await productService.update(id, name, description, price, quantity);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const remove = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    const result = await productService.remove(id);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const restore = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    const result = await productService.restore(id);
-
-    res.success(result);
-  } catch (err) {
-    next(err);
-  }
+  res.success(result, fields.productRestore);
 };
