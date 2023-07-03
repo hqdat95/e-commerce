@@ -7,8 +7,8 @@ export default (req, res, next) => {
     const mapRes = _.cond([
       [_.isNumber, () => data],
       [_.isString, () => data],
-      [_.isArray, (data) => _.map(data, (item) => _.pick(item, keys))],
-      [_.isObject, (data) => _.pick(data, keys)],
+      [_.isArray, (data) => (keys ? _.map(data, (item) => _.pick(item, keys)) : data)],
+      [_.isObject, (data) => (keys ? _.pick(data, keys) : data)],
       [_.stubTrue, () => data],
     ]);
 
