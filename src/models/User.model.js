@@ -1,5 +1,6 @@
 import { Model } from 'sequelize';
 import bcrypt from 'bcryptjs';
+import isRoles from '../constants/users.roles';
 
 class User extends Model {
   static associate(models) {
@@ -44,12 +45,17 @@ export default (sequelize, DataTypes) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       role: {
-        type: DataTypes.ENUM('admin', 'customer'),
+        type: DataTypes.ENUM,
+        values: Object.values(isRoles),
         allowNull: false,
-        defaultValue: 'customer',
+        defaultValue: isRoles.CUSTOMER,
+      },
+      isGoogleLogin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     {
@@ -62,7 +68,15 @@ export default (sequelize, DataTypes) => {
   );
 
   User.beforeCreate(async (user) => {
-    user.password = await bcrypt.hash(user.password, parseInt(process.env.HASH_PASSWORD_SALT));
+    if (user.password) {
+      user.password = await bcrypt.hash(user.password, parseInt(process.env.HASH_PASSWORD_SALT));
+    }
+  });
+
+  User.beforeUpdate(async (user) => {
+    if (user.changed('password')) {
+      user.password = await bcrypt.hash(user.password, parseInt(process.env.HASH_PASSWORD_SALT));
+    }
   });
 
   return User;

@@ -18,11 +18,15 @@ export default {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       role: {
-        type: Sequelize.ENUM('admin', 'customer'),
+        type: Sequelize.STRING,
         allowNull: false,
+      },
+      isGoogleLogin: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -36,7 +40,6 @@ export default {
       },
       deletedAt: {
         type: Sequelize.DATE,
-        allowNull: true,
         defaultValue: null,
       },
     });

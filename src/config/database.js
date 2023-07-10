@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { logQuery } from '../logs/logging.log';
 dotenv.config();
 
 export const development = {
@@ -8,7 +9,7 @@ export const development = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   dialect: 'mysql',
-  logging: false,
+  logging: logQuery,
 };
 
 export const test = {
