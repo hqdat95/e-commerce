@@ -1,15 +1,22 @@
-import schema from '../validator/index.validator';
+import Joi from 'joi';
 import throwError from '../helpers/error.helper';
 
-const validate = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body);
+export default (schemaFunc) => (req, res, next) => {
+  const fields = Object.keys(req.body);
+  const baseSchema = schemaFunc();
 
-  if (error) {
-    throwError(error.details[0].message, 400);
-  }
+  const selectedFields = fields.reduce((obj, field) => {
+    if (baseSchema[field]) {
+      obj[field] = baseSchema[field];
+    }
+    return obj;
+  }, {});
+
+  const validationSchema = Joi.object(selectedFields).unknown();
+
+  const { error } = validationSchema.validate(req.body);
+
+  if (error) throwError(error.details[0].message, 400);
 
   next();
 };
-
-export const localLogin = validate(schema.loginSchema);
-export const handlePassword = validate(schema.passwordSchema);
