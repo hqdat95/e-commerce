@@ -29,6 +29,11 @@ export default {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
+      isDefault: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -60,10 +65,7 @@ export default {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint(
-      'transport_infos',
-      'fk_transport_infos_userId',
-    );
+    await queryInterface.removeConstraint('transport_infos', 'fk_transport_infos_userId');
     await queryInterface.dropTable('transport_infos');
   },
 };
