@@ -7,6 +7,7 @@ import db from './models/index';
 import logger from './config/winston';
 import apiRouter from './routes/api/index.routes';
 import homeRouter from './routes/home/home.routes';
+import session from './middlewares/session.middleware';
 import errorHandler from './middlewares/error.middleware';
 import formatRes from './middlewares/response.middleware';
 
@@ -25,6 +26,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(formatRes);
+app.use(session);
 
 app.use('/', homeRouter);
 app.use('/v1/api', apiRouter);
