@@ -9,6 +9,7 @@ import apiRouter from './routes/api/index.routes';
 import homeRouter from './routes/home/home.routes';
 import errorHandler from './middlewares/error.middleware';
 import formatRes from './middlewares/response.middleware';
+import cleanupTask from './jobs/cleanup.task';
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use(formatRes);
 
 app.use('/', homeRouter);
 app.use('/v1/api', apiRouter);
+
+cleanupTask();
 
 app.use(errorHandler);
 
