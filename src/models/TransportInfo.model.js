@@ -31,7 +31,6 @@ export default (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.UUID,
-        allowNull: false,
       },
       isDefault: {
         type: DataTypes.BOOLEAN,
