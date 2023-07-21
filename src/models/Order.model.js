@@ -36,7 +36,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
-      status: {
+      status_order: {
         type: DataTypes.ENUM('pending', 'confirmed', 'shipping', 'delivered', 'cancelled'),
         allowNull: false,
         defaultValue: 'pending',
