@@ -19,7 +19,9 @@ export const forgotPassword = async (email) => {
 
   const token = await signToken(user, 'password');
 
-  return sendMail.resetPassword(email, token);
+  const mailResponse = await sendMail.resetPassword(email, token);
+
+  return { mailResponse, token };
 };
 
 export const resetPassword = async (user, new_password) => {

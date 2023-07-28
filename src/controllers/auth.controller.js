@@ -50,9 +50,13 @@ export const handlePassword = async (req, res, next) => {
 
   switch (grant_type) {
     case grant.FORGOT_PASSWORD:
-      await passwordService.forgotPassword(email);
+      const { token } = await passwordService.forgotPassword(email);
 
-      res.success('Please check your email!');
+      res.success({
+        message: 'Please check your email!',
+        token: token,
+      });
+
       break;
 
     case grant.RESET_PASSWORD:

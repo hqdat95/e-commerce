@@ -18,7 +18,7 @@ const resetPassword = async (email, token) => {
       <h1>Reset Password</h1>
       <p>You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
       <p>Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:</p>
-      <a href="${process.env.APP_URL}/auth/password?token=${token}">Reset Password</a>
+      <a href="${process.env.APP_URL}/auth/password">Reset Password</a>
       <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
       `,
   });

@@ -14,7 +14,7 @@ export default async (req, res, next) => {
       return;
     }
 
-    const token = req.query.token;
+    const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) throwError('No password token provided', 401);
 
