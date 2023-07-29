@@ -79,5 +79,13 @@ export default (sequelize, DataTypes) => {
     }
   });
 
+  User.prototype.toJSON = function () {
+    if (this instanceof User) {
+      const user = { ...this.get() };
+      delete user.password;
+      return user;
+    }
+  };
+
   return User;
 };
