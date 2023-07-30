@@ -1,13 +1,9 @@
 export default {
   up: async (queryInterface, Sequelize) => {
-    const generateCategory = async (name, parentId, parentName) => {
+    const generateCategory = async (name, parentId) => {
       const category = {
         id: Sequelize.literal('UUID()'),
-        name: parentId
-          ? parentName.includes('{')
-            ? `${parentName} : [ ${name} ]`
-            : `${parentName} { ${name} }`
-          : name,
+        name: name,
         parentId,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -15,9 +11,7 @@ export default {
 
       await queryInterface.bulkInsert('categories', [category]);
 
-      const id = await queryInterface.rawSelect('categories', { where: { name: category.name } }, [
-        'id',
-      ]);
+      const id = await queryInterface.rawSelect('categories', { where: { name: category.name } }, ['id']);
 
       return id;
     };
@@ -26,14 +20,10 @@ export default {
     const childName = 'Apple';
     const grandChildNames = ['Macbook Pro', 'Macbook Air'];
 
-    const parentId = await generateCategory(parentName, null, null);
-    const childId = await generateCategory(childName, parentId, parentName);
+    const parentId = await generateCategory(parentName, null);
+    const childId = await generateCategory(childName, parentId);
 
-    await Promise.all(
-      grandChildNames.map((name) =>
-        generateCategory(name, childId, `${parentName} { ${childName} }`),
-      ),
-    );
+    await Promise.all(grandChildNames.map((name) => generateCategory(name, childId)));
   },
 
   down: async (queryInterface, Sequelize) => {
